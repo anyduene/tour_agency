@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+    
+<div class="bg-gray-100">
+    
+    <header class="bg-blue-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 py-24 text-center">
+            <h2 class="text-4xl font-extrabold">Discover Your Next Adventure</h2>
+            <p class="mt-4 text-lg">Join us for unforgettable experiences and make memories that last a lifetime!</p>
+            <a href="#" class="mt-8 inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-gray-200">Explore Tours</a>
+        </div>
+    </header>
+
+    <section class="py-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-8">Our Popular Tours</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for tour in entities|slice:":3" %}
+                    <a href="/tours/{{ tour.id }}">
+                        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                        <img src="{{ tour.image_url }}" alt="Tour Image" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold">{{ tour.name }}</h3>
+                            <p class="text-gray-600">{{ tour.description }}</p>
+                            <p class="font-bold mt-2">${{ tour.price }}</p>
+                        </div>
+                    </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-gray-200 py-16">
+        <div class="max-w-7xl mx-auto px-1">
+            <h2 class="text-3xl font-bold text-center mb-8">What Our Clients Say</h2>
+            <div class="flex flex-row justify-center">
+                <blockquote class="bg-white shadow-md rounded-lg p-6 max-w-lg m-4">
+                    <p class="text-gray-600">"The best travel experience I’ve ever had! Highly recommend this agency."</p>
+                    <footer class="mt-4">
+                        <cite class="font-semibold">- Jane Doe</cite>
+                    </footer>
+                </blockquote>
+
+                <blockquote class="bg-white shadow-md rounded-lg p-6 max-w-lg m-4">
+                    <p class="text-gray-600">"Amazing service and unforgettable memories! I will definitely book again!"</p>
+                    <footer class="mt-4">
+                        <cite class="font-semibold">- John Smith</cite>
+                    </footer>
+                </blockquote>
+
+                <blockquote class="bg-white shadow-md rounded-lg p-6 max-w-lg m-4">
+                    <p class="text-gray-600">"A fantastic trip organized perfectly by this agency. Everything was taken care of!"</p>
+                    <footer class="mt-4">
+                        <cite class="font-semibold">- Emily Johnson</cite>
+                    </footer>
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+</div>
+    
+{% endblock %}
