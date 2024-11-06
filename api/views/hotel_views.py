@@ -2,15 +2,15 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 
-from api.services.hotel_service import HotelService
+from api.repositories.hotel_repository import HotelRepository
 
 @api_view(['GET'])
 def hotel_list(request):
-    hotels = HotelService.get_all_hotels()
+    hotels = HotelRepository.get_all()
     return render(request, 'hotel_list.html', {'entities': hotels})
 
 def hotel_detail(request, hotel_id):
-    hotel = HotelService.get_hotel_by_id(hotel_id)
+    hotel = HotelRepository.get_by_id(hotel_id)
     return render(request, 'hotel_detail.html', {'hotel': hotel})
 
 @staff_member_required
@@ -25,14 +25,14 @@ def add_hotel(request):
             'mobile_phone': request.POST['mobile_phone'],
             'site': request.POST['site']
         }
-        HotelService.create_hotel(data)
+        HotelRepository.create(data)
         return redirect('hotel-list')
     return render(request, 'add_hotel.html')
 
 @staff_member_required
 def delete_entity(request, id):
     if request.method == 'POST':
-        success = HotelService.delete_hotel(id)
+        success = HotelRepository.delete(id)
         if success:
             return redirect('hotel-list')
         else:

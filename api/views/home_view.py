@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from api.services.tour_service import TourService
+from api.repositories.context import context
 
 
 def home(request):
-    tours = TourService.get_all_tours()
+    tours = context.tours.get_all()
     return render(request, 'index.html', {'entities': tours})

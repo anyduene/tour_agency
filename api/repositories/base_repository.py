@@ -1,6 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 
-class Repository:
+class BaseRepository:
     def __init__(self, model):
         self.model = model
 

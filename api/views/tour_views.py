@@ -1,17 +1,15 @@
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from rest_framework.decorators import api_view
-
-from api.services.tour_service import TourService
+from api.repositories.context import context
 
 @api_view(['GET'])
 def tour_list(request):
-    tours = TourService.get_all_tours()
+    tours = context.tours.get_all()
     return render(request, 'tour_list.html', {'entities': tours})
 
 @api_view(['GET'])
 def tour_detail(request, tour_id):
-    tour = TourService.get_tour_by_id(tour_id)
+    tour = context.tours.get_by_id(tour_id)
     return render(request, 'tour_detail.html', {'tour': tour})
 
 # @staff_member_required
