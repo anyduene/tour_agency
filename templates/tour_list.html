@@ -1,14 +1,24 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Home Page{% endblock %}
+{% block title %}Tours{% endblock %}
 
 {% block content %}
-
 <div class="bg-gray-100">
-
     <div class="container mx-auto py-8">
-        <h1 class="text-3xl font-bold text-center mb-8">Available Tours</h1>
         
+        <!-- Page Header -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-2xl text-blue-600 font-bold text-center">Available Tours:</h1>
+            
+            <!-- Add Tour Button, visible only to admins -->
+            {% if user.is_authenticated and user.is_staff %}
+                <a href="{% url 'add-tour' %}" class="bg-green-500 text-white font-medium py-2 px-4 rounded-lg hover:bg-green-600 transition-all duration-200">
+                    + Add Tour
+                </a>
+            {% endif %}
+        </div>
+        
+        <!-- Tours List -->
         <div class="flex flex-col gap-6">
             {% for tour in entities %}
                 {% include 'blocks/tour_list_block.html' %}
@@ -17,7 +27,5 @@
             {% endfor %}
         </div>
     </div>
-
 </div>
-
 {% endblock %}

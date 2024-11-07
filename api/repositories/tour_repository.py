@@ -10,6 +10,12 @@ class TourRepository:
     def create(self, data):
         return self.repository.create(**data)
 
+    def update(self, tour_id, data):
+        tour = self.repository.get(tour_id)
+        if tour:
+            return self.repository.update(tour, **data)
+        return None
+
     def get_all(self):
         tours = self.repository.all()
         serializer = TourSerializer(tours, many=True)

@@ -23,4 +23,7 @@ class BaseRepository:
         return instance
 
     def delete(self, instance):
-        instance.delete()
+        if instance:
+            instance.delete()
+            return True
+        return False

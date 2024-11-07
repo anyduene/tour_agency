@@ -1,0 +1,80 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Tours{% endblock %}
+
+{% block content %}
+<div class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <a href="{% url 'tour-detail' tour.id %}" class="text-blue-600 hover:underline">← Back to Tour Details</a>
+
+        <div class="bg-white shadow-md rounded-lg p-6 mt-4">
+            <h1 class="text-3xl font-bold mb-6 text-center text-blue-600">Edit Tour: {{ tour.name }}</h1>
+
+            <form method="post" action="{% url 'edit-tour' tour.id %}">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-700">Tour Name</label>
+                    <input type="text" id="name" name="name" value="{{ form.name.value }}" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 p-2">
+                </div>
+
+                <div class="mb-4">
+                    <label for="destination_city" class="block text-gray-700">Destination City</label>
+                    <input type="text" id="destination_city" name="destination_city" value="{{ form.destination_city.value }}" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 p-2">
+                </div>
+
+                <div class="mb-4">
+                    <label for="destination_country" class="block text-gray-700">Destination Country</label>
+                    <input type="text" id="destination_country" name="destination_country" value="{{ form.destination_country.value }}" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 p-2">
+                </div>
+
+                <div class="mb-4">
+                    <label for="description" class="block text-gray-700">Description</label>
+                    <textarea id="description" name="description" rows="4" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 p-2">{{ form.description.value }}</textarea>
+                </div>
+
+                <div class="mb-4 flex space-x-4">
+                    <div class="w-1/2">
+                        <label for="start_date" class="block text-gray-700">Start Date</label>
+                        <input type="date" id="start_date" name="start_date" value="{{ form.start_date.value|date:'Y-m-d' }}" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 p-2">
+                    </div>
+                    <div class="w-1/2">
+                        <label for="end_date" class="block text-gray-700">End Date</label>
+                        <input type="date" id="end_date" name="end_date" value="{{ form.end_date.value|date:'Y-m-d' }}" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 p-2">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="price" class="block text-gray-700">Price (USD)</label>
+                    <input type="number" id="price" name="price" value="{{ form.price.value }}" min="0" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 p-2">
+                </div>
+
+                <div class="mb-4">
+                    <label for="tourist_count" class="block text-gray-700">Tourist Count</label>
+                    <input type="number" id="tourist_count" name="tourist_count" value="{{ form.tourist_count.value }}" min="1" required class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 p-2">
+                </div>
+
+                <div class="mb-4">
+                    <label for="image_url" class="block text-gray-700">Tour Image URL</label>
+                    <input type="text" id="image_url" name="image_url" value="{{ form.image_url.value }}" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 p-2">
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center mt-4">
+                <form method="post" action="{% url 'delete-tour' tour.id %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        Delete Tour
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
