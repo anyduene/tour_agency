@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.urls import path, include
-from requests import delete
 
 from api.views.home_view import home
 from api.views.hotel_views import hotel_list, add_hotel
