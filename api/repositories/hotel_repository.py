@@ -24,3 +24,6 @@ class HotelRepository:
             self.repository.delete(hotel)
             return True
         return False
+
+
+

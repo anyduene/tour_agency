@@ -15,6 +15,7 @@ def tour_list(request):
 @api_view(['GET'])
 def tour_detail(request, tour_id):
     tour = context.tours.get_by_id(tour_id)
+    print(context.tours.avg_tour_price())
     return render(request, 'tour_detail.html', {'tour': tour})
 
 @staff_member_required

@@ -1,0 +1,4 @@
+{% for script, div in graph_data %}
+    {{ script|safe }}
+    <div>{{ div|safe }}</div>
+{% endfor %}

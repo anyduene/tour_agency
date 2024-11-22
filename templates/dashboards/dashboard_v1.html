@@ -1,0 +1,71 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+    <div class="container mx-auto p-8">
+        <h1 class="text-3xl font-semibold mb-8 text-center">Tour Dashboard</h1>
+
+        {% for graph, label in graph_data %}
+            <div class="mb-12 p-6 bg-white shadow-lg rounded-lg">
+                <h2 class="text-2xl font-semibold mb-4 text-center">{{ label }}</h2>
+                <div class="w-full h-[400px] mx-auto">
+                    <div>
+                        {{ graph|safe }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    <div class="mb-12 p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-2xl font-semibold mb-4 text-center">Tours with conditions</h2>
+    <div class="w-full h-[400px] mx-auto">
+        <div>
+            {{ interactive_graph|safe }}
+        </div>
+    </div>
+        <form method="GET" action="{% url 'dashboard-v1' %}">
+            <div class="mb-6">
+                <label for="avg_price_slider" class="block">Average Price (USD):</label>
+                <input type="range" id="avg_price_slider" name="avg_price" min="0" max="5000" step="100" class="w-full" 
+                    value="{{ request.GET.avg_price|default:'0' }}"
+                    oninput="updateAvgPriceValue(this.value)"/>
+                <span id="avg_price_value">{{ request.GET.avg_price|default:'0' }}</span> USD
+            </div>
+
+            <div class="mb-6">
+                <label for="total_tours_input" class="block">Total Tours:</label>
+                <input type="number" id="total_tours_input" name="total_tours" min="0" max="50" class="w-full p-2 border rounded-md" 
+                    value="{{ request.GET.total_tours|default:'0' }}"
+                    oninput="updateTotalToursValue(this.value)"/>
+            </div>
+
+            <div class="mb-6 text-center">
+                <button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Update Graph
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="mb-12 p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-2xl font-semibold mb-4 text-center">{{ label }}</h2>
+        <div class="w-full h-[400px] mx-auto">
+            <div>
+                {{ graph|safe }}
+                
+                <form method="get" action="{% url 'dashboard-v1' %}">
+                    <div class="mb-6">
+                        <label for="country_select" class="block">Select Country:</label>
+                        <select id="country_select" name="country" class="w-full p-2 border rounded-md">
+                            {% for country in countries %}
+                                <option value="{{ country }}" {% if country == country %} selected {% endif %}>{{ country }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Update Graph
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
