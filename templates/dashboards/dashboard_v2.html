@@ -1,4 +1,48 @@
-{% for script, div in graph_data %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель управления</title>
+    <!-- Подключение стилей Bokeh -->
+    {{ bokeh_css|safe }}
+</head>
+<body>
+
+<h1>Панель управления</h1>
+
+<!-- Форма для выбора страны и фильтров -->
+<form method="get">
+    <label for="country">Выберите страну:</label>
+    <select name="country" id="country">
+        {% for c in countries %}
+            <option value="{{ c }}" {% if c == country %}selected{% endif %}>{{ c }}</option>
+        {% endfor %}
+    </select>
+    <label for="avg_price">Минимальная средняя цена:</label>
+    <input type="number" name="avg_price" id="avg_price" value="{{ request.GET.avg_price|default_if_none:0 }}">
+    <label for="total_tours">Минимальное количество туров:</label>
+    <input type="number" name="total_tours" id="total_tours" value="{{ request.GET.total_tours|default_if_none:0 }}">
+    <button type="submit">Применить фильтры</button>
+</form>
+
+<!-- Отображение графиков -->
+{% for script, div, label in graph_data %}
+    <h2>{{ label }}</h2>
     {{ script|safe }}
-    <div>{{ div|safe }}</div>
+    {{ div|safe }}
 {% endfor %}
+
+<!-- Отображение интерактивного графика -->
+<h2>Интерактивный график</h2>
+{{ interactive_graph.0|safe }}
+{{ interactive_graph.1|safe }}
+
+<!-- Отображение графика по месяцам для выбранной страны -->
+<h2>Количество туров по месяцам в {{ country }}</h2>
+{{ graph.0|safe }}
+{{ graph.1|safe }}
+
+<!-- Подключение скриптов Bokeh -->
+{{ bokeh_js|safe }}
+</body>
+</html>
