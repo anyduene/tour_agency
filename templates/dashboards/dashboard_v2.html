@@ -1,48 +1,69 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Панель управления</title>
-    <!-- Подключение стилей Bokeh -->
-    {{ bokeh_css|safe }}
-</head>
-<body>
+{% extends 'base/base.html' %}
 
-<h1>Панель управления</h1>
+{% block content %}
+    <div class="container mx-auto p-8">
+        <h1 class="text-3xl font-semibold mb-8 text-center">Tour Dashboard</h1>
 
-<!-- Форма для выбора страны и фильтров -->
-<form method="get">
-    <label for="country">Выберите страну:</label>
-    <select name="country" id="country">
-        {% for c in countries %}
-            <option value="{{ c }}" {% if c == country %}selected{% endif %}>{{ c }}</option>
+        <!-- Loop through each graph in graph_data -->
+        {% for graph, label in graph_data %}
+            <div class="mb-12 p-6 bg-white shadow-lg rounded-lg flex flex-col items-center">
+                <h2 class="text-2xl font-semibold mb-4 text-center">{{ label }}</h2>
+                {{ graph|safe }}
+            </div>
         {% endfor %}
-    </select>
-    <label for="avg_price">Минимальная средняя цена:</label>
-    <input type="number" name="avg_price" id="avg_price" value="{{ request.GET.avg_price|default_if_none:0 }}">
-    <label for="total_tours">Минимальное количество туров:</label>
-    <input type="number" name="total_tours" id="total_tours" value="{{ request.GET.total_tours|default_if_none:0 }}">
-    <button type="submit">Применить фильтры</button>
-</form>
 
-<!-- Отображение графиков -->
-{% for script, div, label in graph_data %}
-    <h2>{{ label }}</h2>
-    {{ script|safe }}
-    {{ div|safe }}
-{% endfor %}
+        <!-- Interactive Graph Section -->
+        <div class="mb-12 p-6 bg-white shadow-lg rounded-lg">
+            <h2 class="text-2xl font-semibold mb-4 text-center">Tours with Conditions</h2>
+    
+            <!-- Wrap the graph in a div to center it -->
+            <div class="flex justify-center">
+                {{ interactive_graph|safe }}
+            </div>
+    
+            <!-- Form for updating conditions -->
+            <form method="GET" action="{% url 'dashboard-v2' %}">
+                <div class="mb-6">
+                    <label for="avg_price_slider" class="block">Average Price (USD):</label>
+                    <input type="range" id="avg_price_slider" name="avg_price" min="0" max="5000" step="100" class="w-full"
+                        value="{{ avg_price }}"/>
+                    <span id="avg_price_value">{{ avg_price }}</span> USD
+                </div>
 
-<!-- Отображение интерактивного графика -->
-<h2>Интерактивный график</h2>
-{{ interactive_graph.0|safe }}
-{{ interactive_graph.1|safe }}
+                <div class="mb-6">
+                    <label for="total_tours_input" class="block">Total Tours:</label>
+                    <input type="number" id="total_tours_input" name="total_tours" min="0" class="w-full p-2 border rounded-md"
+                        value="{{ total_tours }}"/>
+                </div>
 
-<!-- Отображение графика по месяцам для выбранной страны -->
-<h2>Количество туров по месяцам в {{ country }}</h2>
-{{ graph.0|safe }}
-{{ graph.1|safe }}
+                <div class="mb-6 text-center">
+                    <button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Update Graph
+                    </button>
+                </div>
+            </form>
+        </div>
 
-<!-- Подключение скриптов Bokeh -->
-{{ bokeh_js|safe }}
-</body>
-</html>
+
+        <!-- Tours per Month by Country Section -->
+        <div class="mb-12 p-6 bg-white shadow-lg rounded-lg">
+            <h2 class="text-2xl font-semibold mb-4 text-center">Tours per Month in {{ selected_country }}</h2>
+            {{ tours_per_month_by_country_graph|safe }}
+            
+            <!-- Form for selecting country -->
+            <form method="get" action="{% url 'dashboard-v2' %}">
+                <div class="mb-6">
+                    <label for="country_select" class="block">Select Country:</label>
+                    <select id="country_select" name="country" class="w-full p-2 border rounded-md">
+                        {% for country in countries %}
+                            <option value="{{ country }}" {% if country == selected_country %} selected {% endif %}>{{ country }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    Update Graph
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

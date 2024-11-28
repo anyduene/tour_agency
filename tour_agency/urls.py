@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 
-from api.views.dashboards_view import dashboard_v1
+from api.views.dashboards_view import dashboard_v1, dashboard_v2
 from api.views.home_view import home
 from api.views.hotel_views import hotel_list, add_hotel
 from api.views.request_view import item_list, delete_item
@@ -26,6 +26,6 @@ urlpatterns = [
     path('requests/delete/<int:item_id>/', delete_item, name='requests-delete-item'),
 
 
-    # path('api/dashboard/v2/', dashboard_v2, name='dashboard-v2'),
+    path('dashboard/v2/', dashboard_v2, name='dashboard-v2'),
     path('dashboard/v1/', dashboard_v1, name='dashboard-v1'),
 ]
